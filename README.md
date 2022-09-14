@@ -1,8 +1,11 @@
 # Bookstore
 
 BOOKSTORE REGISTER SOFTWARE
+
 Coded By Nick Volkov
+
 github.com/spark1e
+
 Project repo: github.com/spark1e/Bookstore
 
 Description: This program is designed to be used at bookstore checkout register. Cashier can checkout books, modify and view inventory.
