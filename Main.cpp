@@ -29,13 +29,15 @@ void updateTxt(fstream&, List&);
 //ostream& operator<<(ostream&, const List&);
 
 int main() {
-	fstream file("DB.txt", ios::in | ios::app);	//opened for output
+
+	fstream file("DB.txt", ios::in | ios::app);	//no exception handling needed - app creates and then uses new txt database if one is missing
 
 	List bookstore;
 	setupBookstore(file, bookstore);
 	int mode;
 	do {
 		mode = menu();
+		//system("cls");
 		switch (mode) {
 		case 1:
 			cashier(bookstore);
@@ -47,6 +49,7 @@ int main() {
 			report(bookstore);
 		case 4:
 			break;
+		
 		}
 	} while (mode != 4);
 
@@ -77,25 +80,24 @@ void setupBookstore(fstream& inFile, List& booksList) {
 	int t_int;
 	double t_double[2];
 	string stemp[5];
-
-	while (inFile >> stemp[0]) {
-		inFile.ignore();
-
-		//for 2-4 elements which are string type get data
-		//from the txt database and save to temp array stemp.
-		for (int i = 1; i < 5; i++) {
-			inFile >> stemp[i];
+		while (inFile >> stemp[0]) {		//@@@@@@@@@@@@@@@@ Problem here
 			inFile.ignore();
+
+			//for 2-4 elements which are string type get data
+			//from the txt database and save to temp array stemp.
+			for (int i = 1; i < 5; i++) {
+				inFile >> stemp[i];
+				inFile.ignore();
+			}
+			inFile >> t_int;				//@@@@@@@@@@@@@@
+			inFile.ignore();
+			inFile >> t_double[0];
+			inFile.ignore();
+			inFile >> t_double[1];
+			inFile.ignore();
+			index++;
+			booksList.addBook(stemp[0], stemp[1], stemp[2], stemp[3], stemp[4], t_int, t_double[0], t_double[1], nullptr);
 		}
-		inFile >> t_int;
-		inFile.ignore();
-		inFile >> t_double[0];
-		inFile.ignore();
-		inFile >> t_double[1];
-		inFile.ignore();
-		index++;
-		booksList.addBook(stemp[0], stemp[1], stemp[2], stemp[3], stemp[4], t_int, t_double[0], t_double[1], nullptr);
-	}
 }
 
 // Function adds a new node into List object and gets all the book data from user.
@@ -105,7 +107,7 @@ void setupSingleBook(List& booksList) {
 	double t_double[2];
 	std::string stemp[5];
 
-	std::cout << "Enter ISBN:";
+	std::cout << "Enter ISBN:";		//@@@@@@@@@@
 	cin >> stemp[0];
 	cin.clear();
 	cin.ignore();
@@ -149,6 +151,9 @@ void setupSingleBook(List& booksList) {
 	std::cout << "Successfully added!\n";
 }
 
+
+
+//@@@@@@@@@@@@@ Reorganize using exception
 // Function to get and validate user input.
 // @param int choice passed by ref as a menu choice, int upTo number of options in the menu.
 // @return validated menu choice - key.
@@ -173,6 +178,9 @@ int inputValidation(int& choice, int upTo) {
 		}
 	}
 }
+
+
+
 
 // Cashier Mode Function. This mode is for selling books at the counter.
 // Enter Isbn to add to current cart, add items one by one, once ready for checkout enter 'q'.
